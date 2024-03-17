@@ -1,17 +1,59 @@
+import java.util.Scanner;
+
 // Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
 // then press Enter. You can now see whitespace characters in your code.
 public class Main {
     public static void main(String[] args) {
-        // Press Alt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        Scanner scanner = new Scanner(System.in);
 
-        // Press Shift+F10 or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        while (true) {
+            System.out.println("""
+                Введите арифметическую операцию (например, 1 + 2):
+                если хотите завершить, нажмите 'x'""");
+            String input = scanner.nextLine();
+            if (input.equalsIgnoreCase("x")) {
+                System.out.println("Программа завершена.");
+                break;
+            }
 
-            // Press Shift+F9 to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Ctrl+F8.
-            System.out.println("i = " + i);
+            try {
+                int result = calculate(input);
+                System.out.println("Результат: " + result);
+            } catch (Exception e) {
+                System.out.println("Ошибка: " + e.getMessage());
+            }
+        }
+
+        scanner.close();
+    }
+
+    public static int calculate(String input) throws Exception {
+        String[] parts = input.split(" ");
+        if (parts.length != 3) {
+            throw new Exception("Должно быть 3 значения, включая оператор (+, -, *, /)");
+        }
+
+        int a = Integer.parseInt(parts[0]);
+        int b = Integer.parseInt(parts[2]);
+        char operator = parts[1].charAt(0);
+        if (a < 1 || a > 10 || b < 1 || b > 10) {
+            throw new Exception("Цифры должны быть от 1 до 10");
+        }
+
+        switch (operator) {
+            case '+':
+                return a + b;
+            case '-':
+                return a - b;
+            case '*':
+                return a * b;
+            case '/':
+                if (b == 0) {
+                    throw new Exception("Деление на ноль");
+                }
+                return a / b;
+            default:
+                throw new Exception("Недопустимый оператор");
         }
     }
 }
